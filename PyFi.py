@@ -1,3 +1,6 @@
+from PyFi_prompt import prompt
+
+
 class PyFi:
 
     def __init__(self):
@@ -5,13 +8,37 @@ class PyFi:
         self.monthly_income = 0
         self.monthly_expenses = 0
         self.monthly_cash_flow = 0
+        self.goal = 0
+        self.years_to_goal = 0
 
     def calculate_cash_flow(self):
         self.monthly_cash_flow = self.monthly_income - self.monthly_expenses
         return self.monthly_cash_flow
 
     def calculate_yearly_savings(self):
-        return self.monthly_expenses * 12
+        return self.monthly_cash_flow * 12
+
+    def calculate_ten_year_savings(self):
+        return self.monthly_cash_flow * 12 * 10
+
+    def calculate_years_invested(self, years):
+        x = self.calculate_yearly_savings()
+        y = 0
+        for i in range(years):
+            y = x + (y * 1.07)
+        return round(y, 2)
+
+    def calculate_years_to_goal(self, goal):
+        self.goal = goal
+        x = self.calculate_yearly_savings()
+        i = 0
+        y = 0
+        while i < goal:
+            y += 1
+            i = x + (i * 1.07)
+            print("Year " + str(y), "$" + str(round(i, 2)), "is saved.")
+        self.years_to_goal = y
+        return y
 
     def income_and_expenses(self):
         self.monthly_income = input("Enter your monthly income after taxes\n")
@@ -19,7 +46,8 @@ class PyFi:
         if self.monthly_income.isdigit() and self.monthly_expenses.isdigit():
             self.monthly_income = int(self.monthly_income)
             self.monthly_expenses = int(self.monthly_expenses)
-            print("Your monthly cashflow is ", self.calculate_cash_flow())
+            print("Your monthly cashflow is ", "$" +
+                  str(self.calculate_cash_flow()))
         else:
             print("You must enter numbers as your income.\n")
 
@@ -27,23 +55,41 @@ class PyFi:
         self.income_and_expenses()
         todo = ""
         while todo != "exit":
-            todo = input(
-                "What would you like to do now? ('1' for yearly savings, '2' to reenter income and expenses, 'exit' to end program) \n")
+            todo = input(prompt)
             if todo == "1":
-                print("$", self.calculate_yearly_savings(),
+                print("\n$" + str(self.calculate_yearly_savings()),
                       "is your yearly savings")
             elif todo == "2":
                 self.income_and_expenses()
+            elif todo == "3":
+                print("$" + str(self.calculate_ten_year_savings()),
+                      " is your savings over 10 years!")
+            elif todo == "4":
+                y = input("How many years do you wish to invest over?\n")
+                if y.isdigit:
+                    y = int(y)
+                    print("$" + str(self.calculate_years_invested(y)),
+                          " is your invested savings over " + str(y) + " years!\n")
+                else:
+                    print("Number of years invested needs to be a number!\n")
+            elif todo == "5":
+                y = input("What is your portfolio goal?\n")
+                if y.isdigit:
+                    y = int(y)
+                    print(str(self.calculate_years_to_goal(y)),
+                          " year(s) to reach your goal of $" + str(y) + "\n")
+                else:
+                    print("Portfolio goal needs to be a number!\n")
+            elif todo == "00":
+                print("Your monthly income is $" +
+                      str(self.monthly_income))
+                print("Your monthly expenses are $" +
+                      str(self.monthly_expenses) + "\n")
+            elif todo == "01":
+                print("Your portfolio goal is $" +
+                      str(self.goal))
+                print("The number of years to reach this goal is " +
+                      str(self.monthly_expenses) + "\n")
             else:
                 if todo != "exit":
                     print("That was not a valid choice: \n")
-
-
-if __name__ == '__main__':
-    # This will be different for different functionalities of the application.
-    # as of now the main portion of this application are to be fun through PyFi_cli.py
-    myPyFi = PyFi()
-    myPyFi.net_worth = 10000
-    myPyFi.monthly_income = 8000
-    myPyFi.monthly_expenses = 5000
-    print(myPyFi.calculate_cash_flow())

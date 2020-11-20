@@ -1,4 +1,6 @@
 from PyFi_prompt import prompt
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 class PyFi:
@@ -20,6 +22,18 @@ class PyFi:
 
     def calculate_ten_year_savings(self):
         return self.monthly_cash_flow * 12 * 10
+
+    def visualize_ten_year_savings(self):
+        ycf = self.monthly_cash_flow * 12
+        y = []
+        x = range(10)
+        for i in range(len(x)):
+            y.append(ycf * i)
+        plt.plot(x, y)
+        plt.title('Savings over 10 years')
+        plt.xlabel('Years')
+        plt.ylabel('$ Ammount')
+        plt.show()
 
     def calculate_years_invested(self, years):
         x = self.calculate_yearly_savings()
@@ -64,6 +78,8 @@ class PyFi:
             elif todo == "3":
                 print("$" + str(self.calculate_ten_year_savings()),
                       " is your savings over 10 years!")
+            elif (todo == "3v") or (todo == "3V"):
+                self.visualize_ten_year_savings()
             elif todo == "4":
                 y = input("How many years do you wish to invest over?\n")
                 if y.isdigit:

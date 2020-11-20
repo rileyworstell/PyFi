@@ -13,6 +13,8 @@ To build this image pull down this branch and in your terminal run:
 To run the image:
 `docker run --rm -it pyfi:tag`
 
+NOTE: If you run this using docker, as of now we have not supported showing graphs from the docker container.
+
 If you don't want to run this using docker, you can open up your terminal to the pulled repository and run `python PyFi_cli.py` .
 
 ## How to test:

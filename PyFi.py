@@ -25,22 +25,38 @@ class PyFi:
 
     def visualize_ten_year_savings(self):
         ycf = self.monthly_cash_flow * 12
-        y = []
-        x = range(10)
-        for i in range(len(x)):
-            y.append(ycf * i)
-        plt.plot(x, y)
+        _, x_arr, y_arr = self.calculate_compounding(10, 0, ycf)
+        print(x_arr)
+        print(y_arr)
+        plt.plot(x_arr, y_arr)
         plt.title('Savings over 10 years')
         plt.xlabel('Years')
         plt.ylabel('$ Ammount')
         plt.show()
 
+    def calculate_compounding(self, years, interest_rate, yearly_savings):
+        y_arr = []
+        x_arr = range(years + 1)
+        y = 0
+        for i in range(years + 1):
+            y = yearly_savings + (y * (1+interest_rate))
+            y_arr.append(y)
+        return y, x_arr, y_arr
+
     def calculate_years_invested(self, years):
         x = self.calculate_yearly_savings()
-        y = 0
-        for i in range(years):
-            y = x + (y * 1.07)
+        y, _, _ = self.calculate_compounding(years, 0.07, x)
         return round(y, 2)
+
+    def visualize_years_invested(self, years):
+        x = self.calculate_yearly_savings()
+        y, x_arr, y_arr = self.calculate_compounding(years, 0.07, x)
+        plt.plot(x_arr, y_arr)
+        plt.title('Savings over ' + str(years) +
+                  ' years if invested at 7 percent compounded yearly')
+        plt.xlabel('Years')
+        plt.ylabel('$ Ammount')
+        plt.show()
 
     def calculate_years_to_goal(self, goal):
         self.goal = goal
@@ -86,6 +102,13 @@ class PyFi:
                     y = int(y)
                     print("$" + str(self.calculate_years_invested(y)),
                           " is your invested savings over " + str(y) + " years!\n")
+                else:
+                    print("Number of years invested needs to be a number!\n")
+            elif (todo == "4v") or (todo == "4V"):
+                y = input("How many years do you wish to invest over?\n")
+                if y.isdigit:
+                    y = int(y)
+                    self.visualize_years_invested(y)
                 else:
                     print("Number of years invested needs to be a number!\n")
             elif todo == "5":
